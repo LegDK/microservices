@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.maltsev.api.users.domain.CreateUserRequest;
 import ru.maltsev.api.users.domain.CreateUserResponse;
+import ru.maltsev.api.users.domain.UserResponseEntity;
 import ru.maltsev.api.users.dto.UserDto;
 import ru.maltsev.api.users.service.UserService;
 
@@ -51,6 +52,15 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(returnValue);
 
+    }
+
+    @GetMapping(value = "/{userId}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<UserResponseEntity> getUser(@PathVariable("userId") String userId) {
+
+        UserDto userDto = userService.getUserByUserId(userId);
+        UserResponseEntity returnValue = new ModelMapper().map(userDto, UserResponseEntity.class);
+
+        return ResponseEntity.status(HttpStatus.OK).body(returnValue);
     }
 
 }

@@ -1,28 +1,13 @@
-package ru.maltsev.api.users.dto;
+package ru.maltsev.api.users.domain;
 
-import ru.maltsev.api.users.domain.AlbumsResponseModel;
-
-import java.io.Serializable;
 import java.util.List;
 
-public class UserDto implements Serializable {
-
-
+public class UserResponseEntity {
     private String firstName;
     private String lastName;
-    private String password;
     private String email;
     private String userId;
-    private String encryptedPassword;
     private List<AlbumsResponseModel> albums;
-
-    public List<AlbumsResponseModel> getAlbums() {
-        return albums;
-    }
-
-    public void setAlbums(List<AlbumsResponseModel> albums) {
-        this.albums = albums;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -38,14 +23,6 @@ public class UserDto implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getEmail() {
@@ -64,11 +41,11 @@ public class UserDto implements Serializable {
         this.userId = userId;
     }
 
-    public String getEncryptedPassword() {
-        return encryptedPassword;
+    public List<AlbumsResponseModel> getAlbums() {
+        return albums;
     }
 
-    public void setEncryptedPassword(String encryptedPassword) {
-        this.encryptedPassword = encryptedPassword;
+    public void setAlbums(List<AlbumsResponseModel> albums) {
+        this.albums = albums;
     }
 }
