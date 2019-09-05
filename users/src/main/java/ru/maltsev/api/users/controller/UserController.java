@@ -38,7 +38,7 @@ public class UserController {
             },
             produces = {
                     MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.APPLICATION_JSON_VALUE
+                    MediaType.APPLICATION_XML_VALUE
             }
     )
     public ResponseEntity<CreateUserResponse> createUser(@Valid @RequestBody CreateUserRequest userDetails) {
@@ -54,7 +54,7 @@ public class UserController {
 
     }
 
-    @GetMapping(value = "/{userId}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(value = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UserResponseEntity> getUser(@PathVariable("userId") String userId) {
 
         UserDto userDto = userService.getUserByUserId(userId);

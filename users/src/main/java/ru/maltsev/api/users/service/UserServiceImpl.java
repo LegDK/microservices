@@ -1,17 +1,16 @@
 package ru.maltsev.api.users.service;
 
+import feign.FeignException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.core.ParameterizedTypeReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import ru.maltsev.api.users.data.AlbumsServiceClient;
 import ru.maltsev.api.users.data.UserEntity;
 import ru.maltsev.api.users.data.UserRepository;
@@ -32,6 +31,8 @@ public class UserServiceImpl implements UserService {
     private final AlbumsServiceClient albumsServiceClient;
 
     private final Environment environment;
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, AlbumsServiceClient albumsServiceClient, Environment environment) {
         this.userRepository = userRepository;
@@ -70,14 +71,15 @@ public class UserServiceImpl implements UserService {
 
         UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
 
-//        String albumsUrl = String.format(environment.getProperty("albums.url"), userId);
-//
-//        ResponseEntity<List<AlbumsResponseModel>> albumsResponse = restTemplate.exchange(albumsUrl, HttpMethod.GET, null, new ParameterizedTypeReference<List<AlbumsResponseModel>>() {
-//        });
-//
-//        List<AlbumsResponseModel> albumsList = albumsResponse.getBody();
+        logger.info("Before calling albums");
+        List<AlbumsResponseModel> albumsList = null;
+        logger.info("After calling albums");
 
-        List<AlbumsResponseModel> albumsList = albumsServiceClient.getAlbums(userId);
+        try {
+            albumsList = albumsServiceClient.getAlbums(userId);
+        } catch (FeignException e) {
+            logger.error(e.getLocalizedMessage());
+        }
 
         userDto.setAlbums(albumsList);
 
